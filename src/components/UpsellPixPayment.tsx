@@ -6,7 +6,7 @@ import { loadAddress } from '@/lib/address';
 import { createUpsellPix, getPixStatus } from '@/lib/pix.functions';
 import { isPixPaid, upsellOrder, UPSELL_SELECTION_KEY } from '@/lib/upsell';
 import './upsell-mirror.css';
-export function UpsellPixPayment() {
+export function UpsellPixPayment({ onCancel }: { onCancel?: () => void } = {}) {
   const navigate = useNavigate();
   const create = useServerFn(createUpsellPix); const status = useServerFn(getPixStatus);
   const started = useRef(false);
@@ -49,6 +49,6 @@ export function UpsellPixPayment() {
       <p role="status">Aguardando pagamento...</p>
     </>}
     {error && (!tx || expired) && <Button className="pix-action" onClick={() => window.location.reload()}>Tentar novamente</Button>}
-    <Button variant="ghost" className="mt-4" onClick={() => { void navigate({ to: '/upsell' }); }}>Voltar às ofertas</Button>
+    <Button variant="ghost" className="mt-4" onClick={() => { if (onCancel) onCancel(); else void navigate({ to: '/upsell' }); }}>Voltar às ofertas</Button>
   </main>;
 }
