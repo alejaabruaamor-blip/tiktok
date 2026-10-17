@@ -1,5 +1,24 @@
+import { useEffect, useRef } from "react";
+
 export function MirrorPage({ html }: { html: string }) {
-  return <div dangerouslySetInnerHTML={{ __html: html }} />;
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const videos = Array.from(ref.current?.querySelectorAll("video") ?? []);
+    const handlers = videos.map((v) => {
+      v.muted = true;
+      v.playsInline = true;
+      v.loop = true;
+      v.play().catch(() => {});
+      const onClick = () => {
+        if (v.paused) v.play().catch(() => {});
+        else v.muted = !v.muted;
+      };
+      v.addEventListener("click", onClick);
+      return () => v.removeEventListener("click", onClick);
+    });
+    return () => handlers.forEach((h) => h());
+  }, [html]);
+  return <div ref={ref} dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
 export const mirrorHead = (title: string, description: string) => () => ({
