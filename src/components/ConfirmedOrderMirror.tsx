@@ -30,7 +30,7 @@ export function ConfirmedOrderMirror() {
       const shipping = document.createElement('div'); shipping.className = 'receipt-shipping';
       const a = receipt.address;
       const title = document.createElement('strong'); title.textContent = 'Endereço de entrega';
-      const address = document.createElement('p'); address.textContent = [a.nome, a.endereco, a.numero, a.complemento, a.bairro, a.cidade, a.estado, a.cep].filter(Boolean).join(', ');
+      const address = document.createElement('p'); address.textContent = a ? [a.nome, a.endereco, a.numero, a.complemento, a.bairro, a.cidade, a.estado, a.cep].filter(Boolean).join(', ') : 'Mesmo endereço do seu pedido';
       const estimate = document.createElement('p'); estimate.textContent = 'Previsão de entrega: ' + receipt.delivery;
       const total = document.createElement('strong'); total.textContent = 'Total pago: ' + (receipt.items.reduce((sum, item) => sum + item.amount_cents, 0) / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
       shipping.append(title, address, estimate, total); product.append(shipping);

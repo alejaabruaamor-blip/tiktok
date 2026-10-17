@@ -35,7 +35,6 @@ export const getPixStatus = createServerFn({ method: "GET" })
 export const createUpsellPix = createServerFn({ method: "POST" })
   .inputValidator((d: { items: number[]; customer: Customer; utm?: Record<string, string> }) => {
     const order = upsellOrder(d.items);
-    if (!d.customer?.name?.trim() || !d.customer?.email?.trim()) throw new Error("Dados de entrega indisponíveis");
     return { order, ...details(d.customer, d.utm) };
   })
   .handler(async ({ data }) => charge({ amount_cents: data.order.amount_cents, description: data.order.description }, data.customer, data.utm));

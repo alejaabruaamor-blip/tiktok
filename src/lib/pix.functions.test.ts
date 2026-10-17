@@ -19,3 +19,11 @@ describe('Upsell BravoPay transaction', () => {
     expect(result.amount_cents).toBe(4266); expect(result.pix?.copy_paste).toBe('upsell-code'); expect(result.pix?.qr_code).toBe(''); expect(JSON.parse(fetchMock.mock.calls[0][1].body).amount_cents).toBe(4266);
   });
 });
+describe('Upsell Pix without saved delivery details', () => {
+  it('still generates the Pix instead of asking for the address again', async () => {
+    vi.stubEnv('BRAVOPAY_API_KEY', 'test-key-not-a-real-credential');
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ id: 'no-address', status: 'PENDING', pix: { copy_paste: 'code' } }), { status: 200 })));
+    const result = await createUpsellPix({ data: { items: [0], customer: { name: '', email: '', cpf: '', phone: '' } } });
+    expect(result.amount_cents).toBe(1015); expect(result.pix?.copy_paste).toBe('code');
+  });
+});

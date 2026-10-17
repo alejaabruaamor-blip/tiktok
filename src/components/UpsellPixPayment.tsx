@@ -11,20 +11,20 @@ export function UpsellPixPayment({ onCancel }: { onCancel?: () => void } = {}) {
   const navigate = useNavigate();
   const create = useServerFn(createUpsellPix); const status = useServerFn(getPixStatus);
   const started = useRef(false);
-  const purchase = useRef<{ address: Address; items: number[] } | null>(null);
+  const purchase = useRef<{ address: Address | null; items: number[] } | null>(null);
   const [tx, setTx] = useState<{ id: string; copy: string; qr: string; amount: number } | null>(null);
   const [error, setError] = useState(''); const [copied, setCopied] = useState(false); const [expired, setExpired] = useState(false);
   useEffect(() => {
     if (started.current) return; started.current = true;
+    // Never ask for the address again: reuse the paid order's details when present.
     const address = orderAddress();
-    if (!address) { setError('Dados de entrega indisponíveis. Volte ao seu pedido.'); return; }
     let items: number[];
     try { items = upsellOrder(JSON.parse(sessionStorage.getItem(UPSELL_SELECTION_KEY) ?? 'null')).items; }
     catch { setError('Selecione os itens adicionais antes de gerar o Pix.'); return; }
     purchase.current = { address, items };
     const utm: Record<string, string> = {}; const query = new URLSearchParams(window.location.search);
     for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'ttclid', 'fbclid', 'gclid']) { const value = query.get(key) ?? sessionStorage.getItem(key); if (value) utm[key] = value; }
-    create({ data: { items, customer: { name: address.nome, email: address.email, cpf: address.cpf, phone: address.telefone }, utm } }).then(result => { if (!result.pix) throw new Error('Pix indisponível'); setTx({ id: result.id, copy: result.pix.copy_paste, qr: result.pix.qr_code, amount: result.amount_cents }); }).catch(() => setError('Não foi possível gerar o Pix. Tente novamente.'));
+    create({ data: { items, customer: { name: address?.nome ?? '', email: address?.email ?? '', cpf: address?.cpf ?? '', phone: address?.telefone ?? '' }, utm } }).then(result => { if (!result.pix) throw new Error('Pix indisponível'); setTx({ id: result.id, copy: result.pix.copy_paste, qr: result.pix.qr_code, amount: result.amount_cents }); }).catch(() => setError('Não foi possível gerar o Pix. Tente novamente.'));
   }, [create]);
   useEffect(() => {
     if (!tx) return;

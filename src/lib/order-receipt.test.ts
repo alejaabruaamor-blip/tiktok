@@ -33,4 +33,13 @@ describe('Paid order and upsell shipping', () => {
     expect(confirmInitialOrder('PENDING', 'initial', 'ferramenta', address)).toBe(false);
     expect(loadOrderReceipt()).toBeNull();
   });
+  it('finds the paid order from another tab (shared storage)', () => {
+    confirmInitialOrder('PAID', 'initial', 'ferramenta', address);
+    sessionStorage.clear();
+    expect(orderAddress()).toEqual(address);
+  });
+  it('records paid extras even when no saved address exists', () => {
+    expect(confirmUpsellOrder('PAID', 'extra', [0], null)).toBe(true);
+    expect(loadOrderReceipt()?.items.map(item => item.amount_cents)).toEqual([1015]);
+  });
 });
