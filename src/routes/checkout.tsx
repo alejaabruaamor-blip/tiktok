@@ -8,5 +8,5 @@ export const Route = createFileRoute("/checkout")({
     "Finalizar pedido | TikTok Shop",
     "Finalize o pedido do Kit Ferramentas SOARFLY 4 em 1 com frete grátis."
   ),
-  component: () => <CheckoutMirror html={html} />,
+  component: () => <CheckoutMirror html={html} product="ferramenta" />,
 });

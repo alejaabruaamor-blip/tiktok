@@ -8,5 +8,5 @@ export const Route = createFileRoute("/w3/checkout")({
     "Checkout - Extratora Spot Cleaner W3 | TikTok Shop",
     "Finalize sua compra da Extratora Portátil WAP Spot Cleaner W3 3 em 1 com frete grátis."
   ),
-  component: () => <CheckoutMirror html={html} />,
+  component: () => <CheckoutMirror html={html} product="w3" />,
 });
