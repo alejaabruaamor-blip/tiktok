@@ -17,3 +17,9 @@
 .upsell-mirror .fixed .upsell-buy:disabled { background: var(--upsell-accent); opacity: 0.45; }
 .upsell-pix-overlay { position: fixed; inset: 0; z-index: 60; overflow-y: auto; background: var(--upsell-on-accent); }
 .upsell-pix-overlay .upsell-payment { min-height: 100%; }
+
+.receipt-item { display: flex; gap: 12px; justify-content: space-between; padding: 12px 0; color: var(--upsell-foreground); font-size: 13px; }
+.receipt-item span { min-width: 0; overflow-wrap: anywhere; }
+.receipt-item strong { flex-shrink: 0; color: var(--upsell-accent); }
+.receipt-shipping { padding-top: 16px; color: var(--upsell-foreground); font-size: 13px; }
+.receipt-shipping p { margin: 8px 0; overflow-wrap: anywhere; }

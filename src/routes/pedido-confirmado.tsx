@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MirrorPage, mirrorHead } from "@/components/MirrorPage";
-import html from "@/mirror/pedido-confirmado.html?raw";
+import { mirrorHead } from "@/components/MirrorPage";
+import { ConfirmedOrderMirror } from "@/components/ConfirmedOrderMirror";
 
 export const Route = createFileRoute("/pedido-confirmado")({
   head: mirrorHead(
     "Pedido Confirmado | TikTok Shop",
     "Seu pedido foi confirmado com sucesso."
   ),
-  component: () => <MirrorPage html={html} />,
+  component: ConfirmedOrderMirror,
 });

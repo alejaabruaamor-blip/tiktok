@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import html from "@/mirror/upsell.html?raw";
 import "./upsell-mirror.css";
-import { loadAddress } from "@/lib/address";
 import { UPSELL_SELECTION_KEY } from "@/lib/upsell";
 import { UpsellPixPayment } from "@/components/UpsellPixPayment";
 const brl = (value: number) => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -44,7 +43,6 @@ export function UpsellMirror() {
     const onBuy = () => {
       if (!selected.size) return;
       sessionStorage.setItem(UPSELL_SELECTION_KEY, JSON.stringify([...selected]));
-      if (!loadAddress()) { void navigate({ to: "/endereco", search: { funnel: "/upsell" } }); return; }
       setPixOpen(true);
     };
     buy?.addEventListener("click", onBuy);

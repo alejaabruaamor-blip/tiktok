@@ -20,7 +20,8 @@ describe('Upsell payment selection', () => {
     fireEvent.click(offer);
     expect(buy.disabled).toBe(false);
     fireEvent.click(buy);
-    expect(navigate).toHaveBeenCalledWith({ to: '/endereco', search: { funnel: '/upsell' } });
+    expect(navigate).not.toHaveBeenCalled();
+    expect(container.textContent).toContain('Pix aberto');
     expect(JSON.parse(sessionStorage.getItem(UPSELL_SELECTION_KEY) ?? 'null')).toEqual([0]);
   });
   it('restores selected offers after returning from the delivery form and opens Pix', () => {

@@ -12,4 +12,5 @@
 - Keep post-purchase offer interactions isolated in UpsellMirror while retaining the captured markup, so unrelated mirrored pages stay unchanged.
 - Use the server-validated upsell catalog for additional-item Pix totals; accept only unique offer IDs, never browser-provided amounts.
 - Display upsell Pix inline in UpsellMirror, retaining the standalone payment route for compatibility, and navigate to order confirmation only when BravoPay reports PAID so payment never loops back to the upsell.
-- Enable the upsell payment action when offers are selected, preserving selected IDs across the existing delivery form when customer details are missing so direct visitors can complete their purchase.
+- Keep a session-scoped paid-order receipt with an immutable initial shipping snapshot; generate upsell Pix without a second address form and append payment snapshots only after PAID, deduplicated by transaction ID, so pending or repeated checks never add unpaid or duplicate items.
+- Render confirmation from the paid-order receipt while retaining the mirrored shell, so the displayed items, total and shipping match the confirmed purchase.

@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { mirrorHead } from "@/components/MirrorPage";
-import { loadAddress } from "@/lib/address";
+import { type Address, loadAddress } from "@/lib/address";
 import { createPix, getPixStatus, type PixProduct } from "@/lib/pix.functions";
+
+import { confirmInitialOrder } from "@/lib/order-receipt";
 
 export const Route = createFileRoute("/pagamento")({
   validateSearch: (s: Record<string, unknown>) => ({
@@ -21,6 +23,7 @@ function Pagamento() {
   const create = useServerFn(createPix);
   const status = useServerFn(getPixStatus);
   const [tx, setTx] = useState<{ id: string; copy: string; qr: string; amount: number } | null>(null);
+  const shippingAddress = useRef<Address | null>(null);
   const [err, setErr] = useState("");
   const [copied, setCopied] = useState(false);
 
@@ -30,6 +33,7 @@ function Pagamento() {
       navigate({ to: "/endereco", search: { funnel: p === "w3" ? "/w3" : "/ferramenta" } });
       return;
     }
+    shippingAddress.current = a;
     const q = new URLSearchParams(window.location.search);
     const utm: Record<string, string> = {};
     for (const k of UTM_KEYS) {
@@ -51,6 +55,9 @@ function Pagamento() {
       try {
         const r = await status({ data: { id: tx.id } });
         if (r.status === "PAID") {
+          const address = shippingAddress.current;
+          if (!address) return;
+          confirmInitialOrder(r.status, tx.id, p, address);
           clearInterval(t);
           navigate({ to: "/upsell" });
         }
