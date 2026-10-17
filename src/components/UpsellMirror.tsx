@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import html from "@/mirror/upsell.html?raw";
 import "./upsell-mirror.css";
@@ -10,6 +10,7 @@ export function UpsellMirror() {
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const [pixOpen, setPixOpen] = useState(false);
+  const markup = useMemo(() => ({ __html: html }), []);
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
@@ -55,7 +56,7 @@ export function UpsellMirror() {
     return () => { cleanups.forEach(cleanup => cleanup()); skip?.removeEventListener("click", onSkip); buy?.removeEventListener("click", onBuy); window.clearInterval(interval); };
   }, [navigate]);
   return <>
-    <div className="upsell-mirror" ref={ref} dangerouslySetInnerHTML={{ __html: html }} />
+    <div className="upsell-mirror" ref={ref} dangerouslySetInnerHTML={markup} />
     {pixOpen && <div className="upsell-pix-overlay"><UpsellPixPayment onCancel={() => setPixOpen(false)} /></div>}
   </>;
 }

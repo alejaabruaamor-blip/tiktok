@@ -6,7 +6,7 @@ import { UPSELL_SELECTION_KEY } from '@/lib/upsell';
 const { navigate, loadAddress } = vi.hoisted(() => ({ navigate: vi.fn(), loadAddress: vi.fn() }));
 vi.mock('@tanstack/react-router', () => ({ useNavigate: () => navigate }));
 vi.mock('@/lib/address', () => ({ loadAddress }));
-vi.mock('@/components/UpsellPixPayment', () => ({ UpsellPixPayment: () => <div role="status">Pix aberto</div> }));
+vi.mock('@/components/UpsellPixPayment', () => ({ UpsellPixPayment: ({ onCancel }: { onCancel: () => void }) => <div role="status" onClick={onCancel}>Pix aberto</div> }));
 beforeEach(() => { sessionStorage.clear(); navigate.mockReset(); loadAddress.mockReturnValue(null); });
 afterEach(cleanup);
 
@@ -33,5 +33,10 @@ describe('Upsell payment selection', () => {
     fireEvent.click(buy);
     expect(getByRole('status')).toBeTruthy();
     expect(navigate).not.toHaveBeenCalled();
+    fireEvent.click(getByRole('status'));
+    const restoredBuy = container.querySelector<HTMLButtonElement>('.upsell-buy');
+    expect(restoredBuy?.disabled).toBe(false);
+    fireEvent.click(buy);
+    expect(getByRole('status')).toBeTruthy();
   });
 });
