@@ -18,24 +18,34 @@ export function UpsellMirror() {
     const summary = footer?.querySelector<HTMLElement>(".flex.items-end");
     const clock = root.querySelector<HTMLElement>(".lucide-clock")?.parentElement;
     const selected = new Set<number>();
+    try {
+      const saved: unknown = JSON.parse(sessionStorage.getItem(UPSELL_SELECTION_KEY) ?? "[]");
+      if (Array.isArray(saved)) saved.forEach(index => { if (Number.isInteger(index) && index >= 0 && index < products.length) selected.add(index); });
+    } catch { sessionStorage.removeItem(UPSELL_SELECTION_KEY); }
     const buy = footer?.querySelector<HTMLButtonElement>("button[disabled]");
     const skip = footer?.querySelector<HTMLButtonElement>("button:not([disabled])");
-    const address = loadAddress();
     const money = (node: Element | undefined) => Number(node?.textContent?.replace(/[^\d,]/g, "").replace(",", ".") ?? 0);
     const prices = products.map(product => { const spans = product.querySelectorAll(".items-baseline span"); return { price: money(spans[0]), original: money(spans[1]) }; });
     const update = () => {
-      if (buy) { buy.disabled = selected.size === 0 || !address; buy.textContent = address ? "Pagar itens adicionais com Pix" : "Dados de entrega indisponíveis"; }
+      if (buy) { buy.disabled = selected.size === 0; buy.textContent = "Pagar itens adicionais com Pix"; buy.classList.add("upsell-buy"); }
       let total = 0; let savings = 0;
       selected.forEach(index => { const item = prices[index]; if (item) { total += item.price; savings += item.original - item.price; } });
       if (summary) summary.innerHTML = `<div><div class="upsell-count">${selected.size} ${selected.size === 1 ? "item selecionado" : "itens selecionados"}</div><div class="upsell-total">${brl(total)}</div></div>${selected.size ? `<div class="upsell-savings">Economia de ${brl(savings)}</div>` : ""}`;
     };
     const cleanups = products.map((product, index) => {
       const marker = product.lastElementChild;
-      const toggle = () => { if (selected.has(index)) selected.delete(index); else selected.add(index); const active = selected.has(index); product.setAttribute("aria-pressed", String(active)); product.classList.toggle("upsell-selected", active); marker?.classList.toggle("upsell-check", active); if (marker) marker.textContent = active ? "✓" : ""; update(); };
+      const renderSelection = () => { const active = selected.has(index); product.setAttribute("aria-pressed", String(active)); product.classList.toggle("upsell-selected", active); marker?.classList.toggle("upsell-check", active); if (marker) marker.textContent = active ? "✓" : ""; };
+      renderSelection();
+      const toggle = () => { if (selected.has(index)) selected.delete(index); else selected.add(index); sessionStorage.setItem(UPSELL_SELECTION_KEY, JSON.stringify([...selected])); renderSelection(); update(); };
       product.addEventListener("click", toggle); return () => product.removeEventListener("click", toggle);
     });
     update();
-    const onBuy = () => { if (!selected.size || !address) return; sessionStorage.setItem(UPSELL_SELECTION_KEY, JSON.stringify([...selected])); setPixOpen(true); };
+    const onBuy = () => {
+      if (!selected.size) return;
+      sessionStorage.setItem(UPSELL_SELECTION_KEY, JSON.stringify([...selected]));
+      if (!loadAddress()) { void navigate({ to: "/endereco", search: { funnel: "/upsell" } }); return; }
+      setPixOpen(true);
+    };
     buy?.addEventListener("click", onBuy);
     const onSkip = () => { void navigate({ to: "/pedido-confirmado" }); };
     skip?.addEventListener("click", onSkip);

@@ -53,7 +53,7 @@ function Sheet({ open, title, onClose, children }: { open: boolean; title: strin
 
 function Endereco() {
   const { funnel } = Route.useSearch();
-  const back = funnel === "/w3" ? "/w3/checkout" : "/checkout";
+  const back = funnel === "/upsell" ? "/upsell" : funnel === "/w3" ? "/w3/checkout" : "/checkout";
   const navigate = useNavigate();
   const [a, setA] = useState<Address>(EMPTY);
   const [sheet, setSheet] = useState<"uf" | "city" | null>(null);
