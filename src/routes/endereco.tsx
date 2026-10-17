@@ -4,7 +4,7 @@ import html from "@/mirror/endereco.html?raw";
 
 export const Route = createFileRoute("/endereco")({
   validateSearch: (s: Record<string, unknown>) => ({
-    funnel: typeof s.funnel === "string" ? s.funnel : undefined,
+    funnel: typeof s["funnel"] === "string" ? (s["funnel"] as string) : undefined,
   }),
   head: mirrorHead(
     "Endereço de Entrega | TikTok Shop",
