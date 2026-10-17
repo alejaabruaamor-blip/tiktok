@@ -1,13 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import html from "@/mirror/upsell.html?raw";
 import "./upsell-mirror.css";
 import { loadAddress } from "@/lib/address";
 import { UPSELL_SELECTION_KEY } from "@/lib/upsell";
+import { UpsellPixPayment } from "@/components/UpsellPixPayment";
 const brl = (value: number) => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 export function UpsellMirror() {
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const [pixOpen, setPixOpen] = useState(false);
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
@@ -33,7 +35,7 @@ export function UpsellMirror() {
       product.addEventListener("click", toggle); return () => product.removeEventListener("click", toggle);
     });
     update();
-    const onBuy = () => { if (!selected.size || !address) return; sessionStorage.setItem(UPSELL_SELECTION_KEY, JSON.stringify([...selected])); void navigate({ to: "/upsell-pix" }); };
+    const onBuy = () => { if (!selected.size || !address) return; sessionStorage.setItem(UPSELL_SELECTION_KEY, JSON.stringify([...selected])); setPixOpen(true); };
     buy?.addEventListener("click", onBuy);
     const onSkip = () => { void navigate({ to: "/pedido-confirmado" }); };
     skip?.addEventListener("click", onSkip);
@@ -42,5 +44,8 @@ export function UpsellMirror() {
     tick(); const interval = window.setInterval(tick, 1000);
     return () => { cleanups.forEach(cleanup => cleanup()); skip?.removeEventListener("click", onSkip); buy?.removeEventListener("click", onBuy); window.clearInterval(interval); };
   }, [navigate]);
-  return <div className="upsell-mirror" ref={ref} dangerouslySetInnerHTML={{ __html: html }} />;
+  return <>
+    <div className="upsell-mirror" ref={ref} dangerouslySetInnerHTML={{ __html: html }} />
+    {pixOpen && <div className="upsell-pix-overlay"><UpsellPixPayment onCancel={() => setPixOpen(false)} /></div>}
+  </>;
 }
