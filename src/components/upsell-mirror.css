@@ -1,11 +1,14 @@
 .upsell-mirror .upsell-selected { background: var(--upsell-selected); }
-.upsell-mirror .upsell-check {
-  background: var(--upsell-accent);
-  border-color: var(--upsell-accent);
-  color: var(--upsell-on-accent);
-  font-size: 15px;
-  font-weight: 700;
-}
+.upsell-mirror .upsell-check { background: var(--upsell-accent); border-color: var(--upsell-accent); color: var(--upsell-on-accent); font-size: 15px; font-weight: 700; }
 .upsell-count { color: var(--upsell-muted); font-size: 11.5px; }
 .upsell-total { color: var(--upsell-foreground); font-size: 18px; font-weight: 800; }
 .upsell-savings { color: var(--upsell-success); font-size: 11px; }
+.upsell-payment { min-height: 100vh; max-width: 440px; margin: 0 auto; padding: 32px 20px; text-align: center; background: var(--upsell-on-accent); color: var(--upsell-foreground); }
+.upsell-payment h1 { font-size: 18px; font-weight: 700; }
+.upsell-payment p { margin-top: 20px; color: var(--upsell-muted); font-size: 13px; }
+.upsell-payment .pix-amount { margin-top: 20px; color: var(--upsell-accent); font-size: 24px; font-weight: 800; }
+.upsell-payment .pix-qr { width: 240px; height: 240px; margin: 16px auto; }
+.upsell-payment .pix-code { word-break: break-all; padding: 12px; background: var(--upsell-selected); font-size: 12px; text-align: left; }
+.upsell-payment .pix-action { width: 100%; margin-top: 16px; background: var(--upsell-accent); color: var(--upsell-on-accent); white-space: normal; height: auto; min-height: 40px; }
+.upsell-payment .pix-error { color: var(--upsell-accent); }
+.upsell-mirror .fixed button:not(:disabled) { cursor: pointer; }

@@ -10,3 +10,5 @@
 <!-- LOVABLE:END -->
 
 - Keep post-purchase offer interactions isolated in UpsellMirror while retaining the captured markup, so unrelated mirrored pages stay unchanged.
+- Use the server-validated upsell catalog for additional-item Pix totals; accept only unique offer IDs, never browser-provided amounts.
+- Keep upsell Pix in its existing dedicated route and navigate to order confirmation only when BravoPay reports PAID, so it never loops back to the upsell.
