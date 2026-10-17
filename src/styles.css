@@ -62,6 +62,12 @@
 }
 
 :root {
+  --upsell-accent: #fe2c55;
+  --upsell-selected: #fff7f9;
+  --upsell-foreground: #161823;
+  --upsell-muted: #8a8b91;
+  --upsell-success: #00b8a9;
+  --upsell-on-accent: #fff;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);

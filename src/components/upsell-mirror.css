@@ -1,0 +1,11 @@
+.upsell-mirror .upsell-selected { background: var(--upsell-selected); }
+.upsell-mirror .upsell-check {
+  background: var(--upsell-accent);
+  border-color: var(--upsell-accent);
+  color: var(--upsell-on-accent);
+  font-size: 15px;
+  font-weight: 700;
+}
+.upsell-count { color: var(--upsell-muted); font-size: 11.5px; }
+.upsell-total { color: var(--upsell-foreground); font-size: 18px; font-weight: 800; }
+.upsell-savings { color: var(--upsell-success); font-size: 11px; }
