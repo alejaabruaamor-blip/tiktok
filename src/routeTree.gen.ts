@@ -10,7 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AvaliacoesRouteImport } from './routes/avaliacoes'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as EnderecoRouteImport } from './routes/endereco'
+import { Route as FerramentaRouteImport } from './routes/ferramenta'
 import { Route as PedidoConfirmadoRouteImport } from './routes/pedido-confirmado'
 import { Route as UpsellRouteImport } from './routes/upsell'
 import { Route as UpsellPixRouteImport } from './routes/upsell-pix'
@@ -22,9 +25,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AvaliacoesRoute = AvaliacoesRouteImport.update({
+  id: '/avaliacoes',
+  path: '/avaliacoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnderecoRoute = EnderecoRouteImport.update({
   id: '/endereco',
   path: '/endereco',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FerramentaRoute = FerramentaRouteImport.update({
+  id: '/ferramenta',
+  path: '/ferramenta',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PedidoConfirmadoRoute = PedidoConfirmadoRouteImport.update({
@@ -55,7 +73,10 @@ const W3CheckoutRoute = W3CheckoutRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/avaliacoes': typeof AvaliacoesRoute
+  '/checkout': typeof CheckoutRoute
   '/endereco': typeof EnderecoRoute
+  '/ferramenta': typeof FerramentaRoute
   '/pedido-confirmado': typeof PedidoConfirmadoRoute
   '/upsell': typeof UpsellRoute
   '/upsell-pix': typeof UpsellPixRoute
@@ -64,7 +85,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/avaliacoes': typeof AvaliacoesRoute
+  '/checkout': typeof CheckoutRoute
   '/endereco': typeof EnderecoRoute
+  '/ferramenta': typeof FerramentaRoute
   '/pedido-confirmado': typeof PedidoConfirmadoRoute
   '/upsell': typeof UpsellRoute
   '/upsell-pix': typeof UpsellPixRoute
@@ -74,7 +98,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/avaliacoes': typeof AvaliacoesRoute
+  '/checkout': typeof CheckoutRoute
   '/endereco': typeof EnderecoRoute
+  '/ferramenta': typeof FerramentaRoute
   '/pedido-confirmado': typeof PedidoConfirmadoRoute
   '/upsell': typeof UpsellRoute
   '/upsell-pix': typeof UpsellPixRoute
@@ -85,7 +112,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/avaliacoes'
+    | '/checkout'
     | '/endereco'
+    | '/ferramenta'
     | '/pedido-confirmado'
     | '/upsell'
     | '/upsell-pix'
@@ -94,7 +124,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/avaliacoes'
+    | '/checkout'
     | '/endereco'
+    | '/ferramenta'
     | '/pedido-confirmado'
     | '/upsell'
     | '/upsell-pix'
@@ -103,7 +136,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/avaliacoes'
+    | '/checkout'
     | '/endereco'
+    | '/ferramenta'
     | '/pedido-confirmado'
     | '/upsell'
     | '/upsell-pix'
@@ -113,7 +149,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AvaliacoesRoute: typeof AvaliacoesRoute
+  CheckoutRoute: typeof CheckoutRoute
   EnderecoRoute: typeof EnderecoRoute
+  FerramentaRoute: typeof FerramentaRoute
   PedidoConfirmadoRoute: typeof PedidoConfirmadoRoute
   UpsellRoute: typeof UpsellRoute
   UpsellPixRoute: typeof UpsellPixRoute
@@ -130,11 +169,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/avaliacoes': {
+      id: '/avaliacoes'
+      path: '/avaliacoes'
+      fullPath: '/avaliacoes'
+      preLoaderRoute: typeof AvaliacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/endereco': {
       id: '/endereco'
       path: '/endereco'
       fullPath: '/endereco'
       preLoaderRoute: typeof EnderecoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ferramenta': {
+      id: '/ferramenta'
+      path: '/ferramenta'
+      fullPath: '/ferramenta'
+      preLoaderRoute: typeof FerramentaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pedido-confirmado': {
@@ -177,7 +237,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AvaliacoesRoute: AvaliacoesRoute,
+  CheckoutRoute: CheckoutRoute,
   EnderecoRoute: EnderecoRoute,
+  FerramentaRoute: FerramentaRoute,
   PedidoConfirmadoRoute: PedidoConfirmadoRoute,
   UpsellRoute: UpsellRoute,
   UpsellPixRoute: UpsellPixRoute,
