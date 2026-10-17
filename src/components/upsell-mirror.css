@@ -12,3 +12,5 @@
 .upsell-payment .pix-action { width: 100%; margin-top: 16px; background: var(--upsell-accent); color: var(--upsell-on-accent); white-space: normal; height: auto; min-height: 40px; }
 .upsell-payment .pix-error { color: var(--upsell-accent); }
 .upsell-mirror .fixed button:not(:disabled) { cursor: pointer; }
+.upsell-pix-overlay { position: fixed; inset: 0; z-index: 60; overflow-y: auto; background: var(--upsell-on-accent); }
+.upsell-pix-overlay .upsell-payment { min-height: 100%; }
