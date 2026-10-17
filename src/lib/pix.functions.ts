@@ -28,7 +28,7 @@ async function bravo(path: string, init?: RequestInit) {
   return JSON.parse(text) as {
     id: string;
     status: "PENDING" | "PAID" | "EXPIRED" | "REFUNDED" | "CHARGEBACK";
-    pix?: { copy_paste: string; qr_code: string; expires_at: string } | null;
+    pix?: { copy_paste: string; qr_code?: string | null; expires_at: string } | null;
   };
 }
 
@@ -64,7 +64,12 @@ export const createPix = createServerFn({ method: "POST" })
         expires_in: 1800,
       }),
     });
-    return { id: tx.id, status: tx.status, pix: tx.pix ?? null, amount_cents: p.amount_cents };
+    // BravoPay may omit the image while returning a valid copy-and-paste code.
+    // Keep qr_code a string so the payment page can use its existing QR fallback.
+    const pix = tx.pix && typeof tx.pix.copy_paste === "string" && tx.pix.copy_paste.trim()
+      ? { ...tx.pix, qr_code: typeof tx.pix.qr_code === "string" ? tx.pix.qr_code : "" }
+      : null;
+    return { id: tx.id, status: tx.status, pix, amount_cents: p.amount_cents };
   });
 
 export const getPixStatus = createServerFn({ method: "GET" })
