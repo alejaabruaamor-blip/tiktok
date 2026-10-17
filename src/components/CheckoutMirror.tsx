@@ -12,6 +12,8 @@ export function CheckoutMirror({ html }: { html: string }) {
         /<a class="block bg-white px-4 py-3\.5" href="(\/endereco[^"]*)">[\s\S]*?<\/a>/,
         (_m, href: string) => addressHtml(a, href)
       )
+        // Address filled: "Fazer pedido" goes to the post-purchase upsell.
+        .replace(/onclick="location\.href='\/endereco[^']*'"/, `onclick="location.href='/upsell'"`)
     );
   }, [html]);
   return <MirrorPage html={out} />;
