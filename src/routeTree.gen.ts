@@ -14,11 +14,14 @@ import { Route as AvaliacoesRouteImport } from './routes/avaliacoes'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as EnderecoRouteImport } from './routes/endereco'
 import { Route as FerramentaRouteImport } from './routes/ferramenta'
+import { Route as PagamentoRouteImport } from './routes/pagamento'
 import { Route as PedidoConfirmadoRouteImport } from './routes/pedido-confirmado'
+import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as UpsellRouteImport } from './routes/upsell'
 import { Route as UpsellPixRouteImport } from './routes/upsell-pix'
 import { Route as W3AvaliacoesRouteImport } from './routes/w3/avaliacoes'
 import { Route as W3CheckoutRouteImport } from './routes/w3/checkout'
+import { Route as ApiPublicAdRegionRouteImport } from './routes/api/public/ad-region'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -45,9 +48,19 @@ const FerramentaRoute = FerramentaRouteImport.update({
   path: '/ferramenta',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PagamentoRoute = PagamentoRouteImport.update({
+  id: '/pagamento',
+  path: '/pagamento',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PedidoConfirmadoRoute = PedidoConfirmadoRouteImport.update({
   id: '/pedido-confirmado',
   path: '/pedido-confirmado',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadeRoute = PrivacidadeRouteImport.update({
+  id: '/privacidade',
+  path: '/privacidade',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UpsellRoute = UpsellRouteImport.update({
@@ -70,6 +83,11 @@ const W3CheckoutRoute = W3CheckoutRouteImport.update({
   path: '/w3/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicAdRegionRoute = ApiPublicAdRegionRouteImport.update({
+  id: '/api/public/ad-region',
+  path: '/api/public/ad-region',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -77,11 +95,14 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/endereco': typeof EnderecoRoute
   '/ferramenta': typeof FerramentaRoute
+  '/pagamento': typeof PagamentoRoute
   '/pedido-confirmado': typeof PedidoConfirmadoRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/upsell': typeof UpsellRoute
   '/upsell-pix': typeof UpsellPixRoute
   '/w3/avaliacoes': typeof W3AvaliacoesRoute
   '/w3/checkout': typeof W3CheckoutRoute
+  '/api/public/ad-region': typeof ApiPublicAdRegionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -89,11 +110,14 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/endereco': typeof EnderecoRoute
   '/ferramenta': typeof FerramentaRoute
+  '/pagamento': typeof PagamentoRoute
   '/pedido-confirmado': typeof PedidoConfirmadoRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/upsell': typeof UpsellRoute
   '/upsell-pix': typeof UpsellPixRoute
   '/w3/avaliacoes': typeof W3AvaliacoesRoute
   '/w3/checkout': typeof W3CheckoutRoute
+  '/api/public/ad-region': typeof ApiPublicAdRegionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -102,11 +126,14 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/endereco': typeof EnderecoRoute
   '/ferramenta': typeof FerramentaRoute
+  '/pagamento': typeof PagamentoRoute
   '/pedido-confirmado': typeof PedidoConfirmadoRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/upsell': typeof UpsellRoute
   '/upsell-pix': typeof UpsellPixRoute
   '/w3/avaliacoes': typeof W3AvaliacoesRoute
   '/w3/checkout': typeof W3CheckoutRoute
+  '/api/public/ad-region': typeof ApiPublicAdRegionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -116,11 +143,14 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/endereco'
     | '/ferramenta'
+    | '/pagamento'
     | '/pedido-confirmado'
+    | '/privacidade'
     | '/upsell'
     | '/upsell-pix'
     | '/w3/avaliacoes'
     | '/w3/checkout'
+    | '/api/public/ad-region'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -128,11 +158,14 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/endereco'
     | '/ferramenta'
+    | '/pagamento'
     | '/pedido-confirmado'
+    | '/privacidade'
     | '/upsell'
     | '/upsell-pix'
     | '/w3/avaliacoes'
     | '/w3/checkout'
+    | '/api/public/ad-region'
   id:
     | '__root__'
     | '/'
@@ -140,11 +173,14 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/endereco'
     | '/ferramenta'
+    | '/pagamento'
     | '/pedido-confirmado'
+    | '/privacidade'
     | '/upsell'
     | '/upsell-pix'
     | '/w3/avaliacoes'
     | '/w3/checkout'
+    | '/api/public/ad-region'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -153,11 +189,14 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   EnderecoRoute: typeof EnderecoRoute
   FerramentaRoute: typeof FerramentaRoute
+  PagamentoRoute: typeof PagamentoRoute
   PedidoConfirmadoRoute: typeof PedidoConfirmadoRoute
+  PrivacidadeRoute: typeof PrivacidadeRoute
   UpsellRoute: typeof UpsellRoute
   UpsellPixRoute: typeof UpsellPixRoute
   W3AvaliacoesRoute: typeof W3AvaliacoesRoute
   W3CheckoutRoute: typeof W3CheckoutRoute
+  ApiPublicAdRegionRoute: typeof ApiPublicAdRegionRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -197,11 +236,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FerramentaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pagamento': {
+      id: '/pagamento'
+      path: '/pagamento'
+      fullPath: '/pagamento'
+      preLoaderRoute: typeof PagamentoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pedido-confirmado': {
       id: '/pedido-confirmado'
       path: '/pedido-confirmado'
       fullPath: '/pedido-confirmado'
       preLoaderRoute: typeof PedidoConfirmadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacidade': {
+      id: '/privacidade'
+      path: '/privacidade'
+      fullPath: '/privacidade'
+      preLoaderRoute: typeof PrivacidadeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/upsell': {
@@ -232,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof W3CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/ad-region': {
+      id: '/api/public/ad-region'
+      path: '/api/public/ad-region'
+      fullPath: '/api/public/ad-region'
+      preLoaderRoute: typeof ApiPublicAdRegionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -241,11 +301,14 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   EnderecoRoute: EnderecoRoute,
   FerramentaRoute: FerramentaRoute,
+  PagamentoRoute: PagamentoRoute,
   PedidoConfirmadoRoute: PedidoConfirmadoRoute,
+  PrivacidadeRoute: PrivacidadeRoute,
   UpsellRoute: UpsellRoute,
   UpsellPixRoute: UpsellPixRoute,
   W3AvaliacoesRoute: W3AvaliacoesRoute,
   W3CheckoutRoute: W3CheckoutRoute,
+  ApiPublicAdRegionRoute: ApiPublicAdRegionRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useServerFn } from '@tanstack/react-start';
+import { getCampaignParameters, trackPayment } from '@/lib/ad-tracking';
 import { Button } from '@/components/ui/button';
 import { type Address } from '@/lib/address';
 import { orderAddress, confirmUpsellOrder } from '@/lib/order-receipt';
@@ -22,9 +23,7 @@ export function UpsellPixPayment({ onCancel }: { onCancel?: () => void } = {}) {
     try { items = upsellOrder(JSON.parse(sessionStorage.getItem(UPSELL_SELECTION_KEY) ?? 'null')).items; }
     catch { setError('Selecione os itens adicionais antes de gerar o Pix.'); return; }
     purchase.current = { address, items };
-    const utm: Record<string, string> = {}; const query = new URLSearchParams(window.location.search);
-    for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'ttclid', 'fbclid', 'gclid']) { const value = query.get(key) ?? sessionStorage.getItem(key); if (value) utm[key] = value; }
-    create({ data: { items, customer: { name: address?.nome ?? '', email: address?.email ?? '', cpf: address?.cpf ?? '', phone: address?.telefone ?? '' }, utm } }).then(result => { if (!result.pix) throw new Error('Pix indisponível'); setTx({ id: result.id, copy: result.pix.copy_paste, qr: result.pix.qr_code, amount: result.amount_cents }); }).catch(() => setError('Não foi possível gerar o Pix. Tente novamente.'));
+    getCampaignParameters().catch(() => ({})).then(utm => create({ data: { items, customer: { name: address?.nome ?? '', email: address?.email ?? '', cpf: address?.cpf ?? '', phone: address?.telefone ?? '' }, utm } })).then(result => { if (!result.pix) throw new Error('Pix indisponível'); setTx({ id: result.id, copy: result.pix.copy_paste, qr: result.pix.qr_code, amount: result.amount_cents }); }).catch(() => setError('Não foi possível gerar o Pix. Tente novamente.'));
   }, [create]);
   useEffect(() => {
     if (!tx) return;
@@ -33,7 +32,7 @@ export function UpsellPixPayment({ onCancel }: { onCancel?: () => void } = {}) {
       if (checking) return; checking = true;
       try {
         const result = await status({ data: { id: tx.id } }); if (stopped) return;
-        if (isPixPaid(result.status)) { const paid = purchase.current; if (!paid) return; confirmUpsellOrder(result.status, tx.id, paid.items, paid.address); window.clearInterval(timer); sessionStorage.removeItem(UPSELL_SELECTION_KEY); void navigate({ to: '/pedido-confirmado' }); }
+        if (isPixPaid(result.status)) { const paid = purchase.current; if (!paid) return; confirmUpsellOrder(result.status, tx.id, paid.items, paid.address); await trackPayment(result.status, tx.id, tx.amount, "upsell").catch(() => false); window.clearInterval(timer); sessionStorage.removeItem(UPSELL_SELECTION_KEY); void navigate({ to: '/pedido-confirmado' }); }
         else if (['EXPIRED', 'REFUNDED', 'CHARGEBACK'].includes(result.status)) { window.clearInterval(timer); setExpired(true); setError('Este Pix não está mais disponível. Gere um novo código.'); }
       } catch { /* Network errors never confirm a payment. */ } finally { checking = false; }
     }, 4000);

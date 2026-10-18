@@ -18,7 +18,7 @@ export function ConfirmedOrderMirror() {
     }
     if (h1) h1.textContent = 'Pedido pago e confirmado!';
     const number = page.querySelector('.font-mono');
-    if (number) number.textContent = receipt.payments[0];
+    if (number) number.textContent = receipt.payments[0] ?? "";
     if (product) {
       product.replaceChildren();
       for (const item of receipt.items) {

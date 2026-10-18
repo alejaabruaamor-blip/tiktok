@@ -22,7 +22,7 @@ export function confirmUpsellOrder(status: string, id: string, items: number[], 
   const receipt = loadOrderReceipt() ?? { address, delivery: DELIVERY_ESTIMATE, payments: [], items: [] };
   if (receipt.payments.includes(id)) return true;
   receipt.payments.push(id);
-  receipt.items.push(...selection.items.map(index => ({ ...UPSELL_ITEMS[index] })));
+  for (const index of selection.items) { const item = UPSELL_ITEMS[index]; if (item) receipt.items.push({ ...item }); }
   if (!receipt.address && address) receipt.address = address;
   saveOrderReceipt(receipt);
   return true;

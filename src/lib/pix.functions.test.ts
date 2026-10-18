@@ -16,7 +16,7 @@ describe('Upsell BravoPay transaction', () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ id: 'upsell-test', status: 'PENDING', pix: { copy_paste: 'upsell-code' } }), { status: 200 }));
     vi.stubGlobal('fetch', fetchMock);
     const result = await createUpsellPix({ data: { items: [0, 1], customer: { name: 'Test', email: 'test@example.com', cpf: '', phone: '' } } });
-    expect(result.amount_cents).toBe(4266); expect(result.pix?.copy_paste).toBe('upsell-code'); expect(result.pix?.qr_code).toBe(''); expect(JSON.parse(fetchMock.mock.calls[0][1].body).amount_cents).toBe(4266);
+    expect(result.amount_cents).toBe(4266); expect(result.pix?.copy_paste).toBe('upsell-code'); expect(result.pix?.qr_code).toBe(''); const request = fetchMock.mock.calls[0]?.[1] as RequestInit | undefined; expect(JSON.parse(String(request?.body)).amount_cents).toBe(4266);
   });
 });
 describe('Upsell Pix without saved delivery details', () => {

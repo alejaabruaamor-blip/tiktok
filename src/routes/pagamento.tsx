@@ -5,6 +5,7 @@ import { mirrorHead } from "@/components/MirrorPage";
 import { type Address, loadAddress } from "@/lib/address";
 import { createPix, getPixStatus, type PixProduct } from "@/lib/pix.functions";
 
+import { getCampaignParameters, trackPayment } from "@/lib/ad-tracking";
 import { confirmInitialOrder } from "@/lib/order-receipt";
 
 export const Route = createFileRoute("/pagamento")({
@@ -15,7 +16,6 @@ export const Route = createFileRoute("/pagamento")({
   component: Pagamento,
 });
 
-const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "ttclid", "fbclid", "gclid"];
 
 function Pagamento() {
   const { p } = Route.useSearch();
@@ -34,13 +34,7 @@ function Pagamento() {
       return;
     }
     shippingAddress.current = a;
-    const q = new URLSearchParams(window.location.search);
-    const utm: Record<string, string> = {};
-    for (const k of UTM_KEYS) {
-      const v = q.get(k) ?? sessionStorage.getItem(k);
-      if (v) utm[k] = v;
-    }
-    create({ data: { product: p, customer: { name: a.nome, email: a.email, cpf: a.cpf, phone: a.telefone }, utm } })
+    getCampaignParameters().catch(() => ({})).then(utm => create({ data: { product: p, customer: { name: a.nome, email: a.email, cpf: a.cpf, phone: a.telefone }, utm } }))
       .then((r) => {
         if (!r.pix) throw new Error("Pix indisponível");
         setTx({ id: r.id, copy: r.pix.copy_paste, qr: r.pix.qr_code, amount: r.amount_cents });
@@ -58,6 +52,7 @@ function Pagamento() {
           const address = shippingAddress.current;
           if (!address) return;
           confirmInitialOrder(r.status, tx.id, p, address);
+          await trackPayment(r.status, tx.id, tx.amount, p).catch(() => false);
           clearInterval(t);
           navigate({ to: "/upsell" });
         }

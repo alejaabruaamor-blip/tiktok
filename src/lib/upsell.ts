@@ -10,6 +10,6 @@ export const UPSELL_SELECTION_KEY = 'tiktokshop:upsell-items';
 export function upsellOrder(items: unknown) {
   if (!Array.isArray(items) || items.length === 0 || items.length > UPSELL_ITEMS.length || items.some(id => !Number.isInteger(id) || id < 0 || id >= UPSELL_ITEMS.length) || new Set(items).size !== items.length) throw new Error('Selecione itens válidos');
   const ids = items as number[];
-  return { items: ids, amount_cents: ids.reduce((sum, id) => sum + UPSELL_ITEMS[id].amount_cents, 0), description: ids.map(id => UPSELL_ITEMS[id].description).join(' + ') };
+  return { items: ids, amount_cents: ids.reduce((sum, id) => sum + (UPSELL_ITEMS[id]?.amount_cents ?? 0), 0), description: ids.map(id => UPSELL_ITEMS[id]?.description ?? "").join(' + ') };
 }
 export function isPixPaid(status: string) { return status === 'PAID'; }
