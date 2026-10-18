@@ -68,6 +68,7 @@
   --upsell-muted: #8a8b91;
   --upsell-success: #00b8a9;
   --upsell-on-accent: #fff;
+  --address-save-incomplete: #fbb6c2;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
@@ -150,3 +151,14 @@
 }
 
 .ad-privacy-footer { background: var(--background); color: var(--muted-foreground); padding: 12px 16px 160px; text-align: center; font-size: 12px; }
+
+.address-save-button,
+.address-save-button:hover {
+  background: var(--upsell-accent);
+  color: var(--upsell-on-accent);
+}
+.address-save-button[aria-disabled="true"],
+.address-save-button[aria-disabled="true"]:hover {
+  background: var(--address-save-incomplete);
+  color: var(--upsell-foreground);
+}

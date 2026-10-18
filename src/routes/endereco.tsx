@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { mirrorHead } from "@/components/MirrorPage";
+import { Button } from "@/components/ui/button";
 import { loadAddress, saveAddress, maskCep, maskCpf, maskPhone, type Address } from "@/lib/address";
 
 export const Route = createFileRoute("/endereco")({
@@ -173,7 +174,7 @@ function Endereco() {
           <div className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-[440px] bg-white pt-2">
             <div className="px-6 pb-2 text-center text-[12px] leading-relaxed text-[#5a5b60]">Leia a <span className="font-semibold text-[#161823]">Política de privacidade do TikTok</span> para saber mais sobre como usamos suas informações pessoais.</div>
             <div className="px-4 pb-[max(env(safe-area-inset-bottom),12px)]">
-              <button type="button" onClick={save} className={`w-full rounded-full py-3 text-[16px] font-semibold text-white transition ${valid ? "bg-[#fe2c55]" : "bg-[#fbb6c2]"}`}>Salvar</button>
+              <Button type="button" onClick={save} aria-disabled={!valid} className="address-save-button w-full h-12 rounded-full text-[16px] font-semibold">Salvar</Button>
             </div>
           </div>
         </div>
