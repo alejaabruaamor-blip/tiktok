@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useServerFn } from '@tanstack/react-start';
 import { getCampaignParameters, trackPayment } from '@/lib/ad-tracking';
-import { Button } from '@/components/ui/button';
+import { PixPaymentView } from '@/components/PixPaymentView';
 import { type Address } from '@/lib/address';
 import { orderAddress, confirmUpsellOrder } from '@/lib/order-receipt';
 import { createUpsellPix, getPixStatus } from '@/lib/pix.functions';
@@ -39,18 +39,19 @@ export function UpsellPixPayment({ onCancel }: { onCancel?: () => void } = {}) {
     return () => { stopped = true; window.clearInterval(timer); };
   }, [tx, status, navigate]);
   const qr = tx ? (/^(data:image\/|https:\/\/)/.test(tx.qr) ? tx.qr : `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(tx.copy)}`) : '';
-  return <main className="upsell-payment">
-    <h1>Itens adicionais — Pix</h1>
-    {error && <p role="alert" className="pix-error">{error}</p>}
-    {!tx && !error && <p role="status">Gerando seu código Pix…</p>}
-    {tx && !expired && <>
-      <div className="pix-amount">R$ {(tx.amount / 100).toFixed(2).replace('.', ',')}</div>
-      <img className="pix-qr" src={qr} alt="QR Code Pix dos itens adicionais" />
-      <div className="pix-code">{tx.copy}</div>
-      <Button className="pix-action" onClick={() => { navigator.clipboard.writeText(tx.copy).then(() => setCopied(true)).catch(() => setError('Não foi possível copiar. Selecione o código Pix acima.')); }}>{copied ? 'Código copiado!' : 'Copiar código Pix'}</Button>
-      <p role="status">Aguardando pagamento...</p>
-    </>}
-    {error && (!tx || expired) && <Button className="pix-action" onClick={() => window.location.reload()}>Tentar novamente</Button>}
-    <Button variant="ghost" className="mt-4" onClick={() => { if (onCancel) onCancel(); else void navigate({ to: '/upsell' }); }}>Voltar às ofertas</Button>
-  </main>;
+  return <PixPaymentView
+    title="Itens adicionais — Pix"
+    subtitle="Os itens adicionais vão para o mesmo endereço do seu pedido."
+    transaction={tx}
+    qr={qr}
+    copied={copied}
+    error={error}
+    expired={expired}
+    onCopy={() => {
+      if (!tx) return;
+      navigator.clipboard.writeText(tx.copy).then(() => setCopied(true)).catch(() => setError('Não foi possível copiar. Selecione o código Pix acima.'));
+    }}
+    onRetry={() => window.location.reload()}
+    onBack={() => { if (onCancel) onCancel(); else void navigate({ to: '/upsell' }); }}
+  />;
 }

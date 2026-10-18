@@ -19,6 +19,9 @@
  */
 
 @theme inline {
+  --color-payment-action: var(--payment-action);
+  --color-payment-action-hover: var(--payment-action-hover);
+  --color-payment-on-action: var(--payment-on-action);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -62,6 +65,17 @@
 }
 
 :root {
+  --payment-background: oklch(0.975 0.003 260);
+  --payment-surface: oklch(1 0 0);
+  --payment-foreground: oklch(0.23 0.018 270);
+  --payment-muted: oklch(0.49 0.014 270);
+  --payment-border: oklch(0.92 0.006 270);
+  --payment-action: oklch(0.61 0.225 17);
+  --payment-action-hover: oklch(0.55 0.225 17);
+  --payment-on-action: oklch(1 0 0);
+  --payment-success: oklch(0.44 0.09 170);
+  --payment-success-surface: oklch(0.97 0.016 170);
+  --payment-error-surface: oklch(0.97 0.016 17);
   --upsell-accent: #fe2c55;
   --upsell-selected: #fff7f9;
   --upsell-foreground: #161823;
@@ -112,7 +126,7 @@
   --popover: oklch(0.208 0.042 265.755);
   --popover-foreground: oklch(0.984 0.003 247.858);
   --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
+  --primary-foreground: oklch(0.984 0.003 247.858);
   --secondary: oklch(0.279 0.041 260.031);
   --secondary-foreground: oklch(0.984 0.003 247.858);
   --muted: oklch(0.279 0.041 260.031);
@@ -162,3 +176,4 @@
   background: var(--address-save-incomplete);
   color: var(--upsell-foreground);
 }
+

@@ -7,6 +7,7 @@ import { createPix, getPixStatus, type PixProduct } from "@/lib/pix.functions";
 
 import { getCampaignParameters, trackPayment } from "@/lib/ad-tracking";
 import { confirmInitialOrder } from "@/lib/order-receipt";
+import { PixPaymentView } from "@/components/PixPaymentView";
 
 export const Route = createFileRoute("/pagamento")({
   validateSearch: (s: Record<string, unknown>) => ({
@@ -67,40 +68,17 @@ function Pagamento() {
       : `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(tx.copy)}`
     : "";
 
-  return (
-    <div className="min-h-screen w-full bg-[#e5e5e7]">
-      <div className="mx-auto min-h-screen w-full max-w-[440px] bg-white px-5 pb-10 pt-8 text-center text-[#161823]">
-        <h1 className="text-[18px] font-bold">Pague com Pix</h1>
-        <p className="mt-1 text-[13px] text-[#5a5b60]">Seu pedido é confirmado assim que o pagamento for aprovado.</p>
-        {err && (
-          <div className="mt-6">
-            <p className="text-[14px] text-[#fe2c55]">{err}</p>
-            <button onClick={() => window.location.reload()} className="mt-4 w-full rounded-full bg-[#fe2c55] py-2.5 font-semibold text-white">Tentar novamente</button>
-          </div>
-        )}
-        {!err && !tx && <p className="mt-10 text-[14px] text-[#8a8b91]">Gerando seu Pix...</p>}
-        {tx && (
-          <>
-            <div className="mt-4 text-[24px] font-extrabold text-[#fe2c55]">
-              R$ {(tx.amount / 100).toFixed(2).replace(".", ",")}
-            </div>
-            <img src={qrSrc} alt="QR Code Pix" className="mx-auto mt-4 h-[240px] w-[240px]" />
-            <div className="mt-4 break-all rounded-md bg-[#f5f5f5] p-3 text-left text-[12px] text-[#5a5b60]">{tx.copy}</div>
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(tx.copy).then(() => setCopied(true));
-              }}
-              className="mt-3 w-full rounded-full bg-[#fe2c55] py-2.5 text-[15px] font-semibold text-white"
-            >
-              {copied ? "Código copiado!" : "Copiar código Pix"}
-            </button>
-            <p className="mt-5 flex items-center justify-center gap-2 text-[13px] text-[#8a8b91]">
-              <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-[#00b8a9]" />
-              Aguardando pagamento...
-            </p>
-          </>
-        )}
-      </div>
-    </div>
-  );
+  return <PixPaymentView
+    title="Pague com Pix"
+    subtitle="Seu pedido é confirmado assim que o pagamento for aprovado."
+    transaction={tx}
+    qr={qrSrc}
+    copied={copied}
+    error={err}
+    onCopy={() => {
+      if (!tx) return;
+      navigator.clipboard.writeText(tx.copy).then(() => setCopied(true)).catch(() => setErr("Não foi possível copiar. Selecione o código Pix acima."));
+    }}
+    onRetry={() => window.location.reload()}
+  />;
 }
